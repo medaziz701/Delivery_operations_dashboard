@@ -1,0 +1,209 @@
+{
+  "orders": [
+    {
+      "id": 1001,
+      "customerName": "أحمد محمود",
+      "agentPhone": "201001234567",
+      "pageName": "متجر النخبة",
+      "pageNumber": "01",
+      "status": "قيد التنفيذ",
+      "awaitingPageReply": true,
+      "price": 120,
+      "rejectedOnArrival": false,
+      "createdAt": "2026-01-03T10:10:00.000Z",
+      "updatedAt": "2026-01-05T08:30:00.000Z",
+      "conversation": [
+        {
+          "id": "m1",
+          "type": "text",
+          "from": "customer",
+          "text": "السلام عليكم، محتاج الطلب بسرعة لو سمحت.",
+          "ts": "2026-01-05T08:10:00.000Z"
+        },
+        {
+          "id": "m2",
+          "type": "text",
+          "from": "agent",
+          "text": "تمام، جاري المتابعة مع الصفحة.",
+          "ts": "2026-01-05T08:12:00.000Z"
+        },
+        {
+          "id": "m3",
+          "type": "text",
+          "from": "page",
+          "text": "تم الاستلام وسيتم التجهيز الآن.",
+          "ts": "2026-01-05T08:30:00.000Z"
+        }
+      ],
+      "timeline": [
+        { "status": "معلق", "ts": "2026-01-03T10:10:00.000Z", "note": "تم إنشاء الطلب" },
+        { "status": "قيد التنفيذ", "ts": "2026-01-05T08:12:00.000Z", "note": "تم إسناد الطلب للمندوب" }
+      ]
+    },
+    {
+      "id": 1002,
+      "customerName": "سارة علي",
+      "agentPhone": "201227654321",
+      "pageName": "سوق المدينة",
+      "pageNumber": "02",
+      "status": "معلق",
+      "awaitingPageReply": true,
+      "price": 75,
+      "rejectedOnArrival": false,
+      "createdAt": "2026-01-05T07:20:00.000Z",
+      "updatedAt": "2026-01-05T07:35:00.000Z",
+      "conversation": [
+        {
+          "id": "m1",
+          "type": "text",
+          "from": "customer",
+          "text": "هل تم إرسال الطلب للصفحة؟",
+          "ts": "2026-01-05T07:20:00.000Z"
+        },
+        {
+          "id": "m2",
+          "type": "text",
+          "from": "agent",
+          "text": "نعم، بانتظار الرد.",
+          "ts": "2026-01-05T07:35:00.000Z"
+        }
+      ],
+      "timeline": [
+        { "status": "معلق", "ts": "2026-01-05T07:20:00.000Z", "note": "تم إنشاء الطلب" }
+      ]
+    },
+    {
+      "id": 1003,
+      "customerName": "محمد إبراهيم",
+      "agentPhone": "201115551111",
+      "pageName": "عطور الروان",
+      "pageNumber": "03",
+      "status": "تم التسليم",
+      "awaitingPageReply": false,
+      "price": 210,
+      "rejectedOnArrival": false,
+      "createdAt": "2026-01-02T11:00:00.000Z",
+      "updatedAt": "2026-01-04T16:25:00.000Z",
+      "conversation": [
+        {
+          "id": "m1",
+          "type": "text",
+          "from": "page",
+          "text": "تم تجهيز الطلب، جاهز للاستلام.",
+          "ts": "2026-01-04T14:05:00.000Z"
+        },
+        {
+          "id": "m2",
+          "type": "image",
+          "from": "page",
+          "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='560' height='320'><rect width='100%25' height='100%25' fill='%23eef2ff'/><text x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Cairo, Arial' font-size='28' fill='%230f172a'>صورة فاتورة (تجريبية)</text></svg>",
+          "ts": "2026-01-04T14:06:00.000Z"
+        },
+        {
+          "id": "m3",
+          "type": "text",
+          "from": "agent",
+          "text": "تم التسليم للعميل بنجاح.",
+          "ts": "2026-01-04T16:25:00.000Z"
+        }
+      ],
+      "timeline": [
+        { "status": "معلق", "ts": "2026-01-02T11:00:00.000Z", "note": "تم إنشاء الطلب" },
+        { "status": "قيد التنفيذ", "ts": "2026-01-04T14:05:00.000Z", "note": "بدء التنفيذ" },
+        { "status": "تم التسليم", "ts": "2026-01-04T16:25:00.000Z", "note": "تم التسليم" }
+      ]
+    },
+    {
+      "id": 1004,
+      "customerName": "ريم حسن",
+      "agentPhone": "201009990000",
+      "pageName": "ملابس ستايل",
+      "pageNumber": "01",
+      "status": "مشكلة",
+      "awaitingPageReply": false,
+      "price": 145,
+      "rejectedOnArrival": false,
+      "createdAt": "2026-01-04T09:05:00.000Z",
+      "updatedAt": "2026-01-05T09:01:00.000Z",
+      "conversation": [
+        {
+          "id": "m1",
+          "type": "text",
+          "from": "agent",
+          "text": "تم التواصل مع الصفحة ولم يصل رد حتى الآن.",
+          "ts": "2026-01-05T08:55:00.000Z"
+        },
+        {
+          "id": "m2",
+          "type": "text",
+          "from": "customer",
+          "text": "في مشكلة؟",
+          "ts": "2026-01-05T09:01:00.000Z"
+        }
+      ],
+      "timeline": [
+        { "status": "معلق", "ts": "2026-01-04T09:05:00.000Z", "note": "تم إنشاء الطلب" },
+        { "status": "مشكلة", "ts": "2026-01-05T09:01:00.000Z", "note": "تم وضع الطلب كحالة مشكلة" }
+      ]
+    },
+    {
+      "id": 1005,
+      "customerName": "خالد يوسف",
+      "agentPhone": "201333221100",
+      "pageName": "الكترونيات برو",
+      "pageNumber": "02",
+      "status": "مرفوض",
+      "awaitingPageReply": false,
+      "price": 399,
+      "rejectedOnArrival": true,
+      "createdAt": "2026-01-01T15:40:00.000Z",
+      "updatedAt": "2026-01-03T12:10:00.000Z",
+      "conversation": [
+        {
+          "id": "m1",
+          "type": "text",
+          "from": "agent",
+          "text": "العميل رفض الطلب عند الوصول.",
+          "ts": "2026-01-03T12:10:00.000Z"
+        }
+      ],
+      "timeline": [
+        { "status": "معلق", "ts": "2026-01-01T15:40:00.000Z", "note": "تم إنشاء الطلب" },
+        { "status": "مرفوض", "ts": "2026-01-03T12:10:00.000Z", "note": "رفض عند الوصول" }
+      ]
+    },
+    {
+      "id": 1006,
+      "customerName": "ندى سمير",
+      "agentPhone": "201010101010",
+      "pageName": "مستلزمات بيت",
+      "pageNumber": "03",
+      "status": "قيد التنفيذ",
+      "awaitingPageReply": false,
+      "price": 65,
+      "rejectedOnArrival": false,
+      "createdAt": "2025-12-31T10:00:00.000Z",
+      "updatedAt": "2026-01-05T06:45:00.000Z",
+      "conversation": [
+        {
+          "id": "m1",
+          "type": "text",
+          "from": "page",
+          "text": "تم تجهيز الطلب.",
+          "ts": "2026-01-05T06:40:00.000Z"
+        },
+        {
+          "id": "m2",
+          "type": "audio",
+          "from": "agent",
+          "durationSec": 8,
+          "ts": "2026-01-05T06:45:00.000Z"
+        }
+      ],
+      "timeline": [
+        { "status": "معلق", "ts": "2025-12-31T10:00:00.000Z", "note": "تم إنشاء الطلب" },
+        { "status": "قيد التنفيذ", "ts": "2026-01-05T06:45:00.000Z", "note": "تم تحديث الحالة" }
+      ]
+    }
+  ]
+}
