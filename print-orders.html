@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>طباعة الطلبات | Quick Delivery</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Cairo', system-ui, -apple-system, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #fff;
+      color: #000;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .print-header {
+      text-align: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #000;
+    }
+    .print-header h1 {
+      margin: 0 0 5px 0;
+      font-size: 24px;
+      font-weight: 700;
+    }
+    .print-header .date {
+      font-size: 14px;
+      color: #666;
+    }
+    .order-card {
+      border: 1px solid #000;
+      margin-bottom: 20px;
+      page-break-inside: avoid;
+    }
+    .order-header {
+      background: #f5f5f5;
+      padding: 10px 15px;
+      border-bottom: 1px solid #000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .order-id {
+      font-weight: 700;
+      font-size: 16px;
+    }
+    .order-status {
+      padding: 3px 10px;
+      border-radius: 3px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .order-body {
+      padding: 15px;
+    }
+    .info-row {
+      display: flex;
+      margin-bottom: 8px;
+    }
+    .info-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #555;
+    }
+    .info-value {
+      flex: 1;
+    }
+    .section-title {
+      font-weight: 700;
+      margin: 15px 0 10px 0;
+      padding-bottom: 5px;
+      border-bottom: 1px solid #ddd;
+      font-size: 14px;
+    }
+    .conversation {
+      max-height: 150px;
+      overflow: hidden;
+    }
+    .msg {
+      padding: 5px 0;
+      border-bottom: 1px dotted #ddd;
+      font-size: 12px;
+    }
+    .msg:last-child {
+      border-bottom: none;
+    }
+    .msg-from {
+      font-weight: 600;
+      color: #333;
+    }
+    .msg-time {
+      color: #999;
+      font-size: 11px;
+    }
+    .print-footer {
+      text-align: center;
+      margin-top: 30px;
+      padding-top: 15px;
+      border-top: 1px solid #000;
+      font-size: 12px;
+      color: #666;
+    }
+    .no-orders {
+      text-align: center;
+      padding: 50px;
+      font-size: 18px;
+      color: #999;
+    }
+    .loading {
+      text-align: center;
+      padding: 50px;
+    }
+    @media print {
+      body { padding: 0; }
+      .no-print { display: none; }
+      .order-card { page-break-inside: avoid; }
+    }
+    .btn-print {
+      background: #0d6efd;
+      color: #fff;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      font-family: inherit;
+    }
+    .btn-print:hover {
+      background: #0b5ed7;
+    }
+    .actions {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="actions no-print">
+    <button class="btn-print" onclick="window.print()">
+      🖨️ طباعة
+    </button>
+  </div>
+
+  <div id="content">
+    <div class="loading">جاري تحميل الطلبات...</div>
+  </div>
+
+  <script src="assets/js/utils.js?v=20260128-1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js?v=20260128-1"></script>
+  <script src="assets/js/supabase.js?v=20260128-1"></script>
+  <script src="assets/js/store.js?v=20260201-2"></script>
+
+  <script>
+    (function() {
+      'use strict';
+
+      function getOrderIdsFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        const idsParam = params.get('ids');
+        if (!idsParam) return [];
+        return idsParam.split(',').map(id => id.trim()).filter(Boolean);
+      }
+
+      function formatDateTime(iso) {
+        if (!iso) return '—';
+        try {
+          const d = new Date(iso);
+          return d.toLocaleString('ar', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+        } catch {
+          return iso;
+        }
+      }
+
+      function escapeHtml(str) {
+        if (str == null) return '';
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
+
+      function getStatusColor(status) {
+        const s = String(status || '').trim();
+        const colors = {
+          'معلق': '#ffc107',
+          'قيد التنفيذ': '#0d6efd',
+          'جاري التوصيل': '#0d6efd',
+          'رفض عند الوصول': '#dc3545',
+          'تم التسليم': '#198754',
+          'مشكلة': '#dc3545',
+          'مرفوض': '#212529',
+          'ملغي': '#6c757d',
+        };
+        return colors[s] || '#6c757d';
+      }
+
+      function renderOrder(order) {
+        const statusColor = getStatusColor(order.status);
+        const conv = Array.isArray(order.conversation) ? order.conversation : [];
+        const lastMessages = conv.slice(-3).reverse();
+
+        let conversationHtml = '<div class="section-title">آخر الرسائل</div>';
+        if (lastMessages.length === 0) {
+          conversationHtml += '<div class="msg">لا توجد رسائل</div>';
+        } else {
+          conversationHtml += '<div class="conversation">';
+          lastMessages.forEach(m => {
+            const from = m.from === 'agent' ? 'المندوب' :
+                        m.from === 'page' ? 'الصفحة' :
+                        m.from === 'customer' ? 'العميل' :
+                        m.from === 'tracking' ? 'المتابعة' : m.from;
+            const body = m.type === 'text' ? escapeHtml(m.text) :
+                        m.type === 'image' ? '📷 صورة' :
+                        m.type === 'audio' ? '🎤 تسجيل صوتي' : 'رسالة';
+            conversationHtml += `
+              <div class="msg">
+                <span class="msg-from">${escapeHtml(from)}:</span>
+                ${body}
+                <span class="msg-time">${formatDateTime(m.ts)}</span>
+              </div>
+            `;
+          });
+          conversationHtml += '</div>';
+        }
+
+        return `
+          <div class="order-card">
+            <div class="order-header">
+              <div class="order-id">طلب #${escapeHtml(order.id)}</div>
+              <div class="order-status" style="background: ${statusColor}; color: #fff;">
+                ${escapeHtml(order.status || '—')}
+              </div>
+            </div>
+            <div class="order-body">
+              <div class="info-row">
+                <div class="info-label">المندوب:</div>
+                <div class="info-value">${escapeHtml(order.agentName || '—')} ${order.agentPhone ? `(${escapeHtml(order.agentPhone)})` : ''}</div>
+              </div>
+              <div class="info-row">
+                <div class="info-label">الصفحة:</div>
+                <div class="info-value">${escapeHtml(order.pageName || '—')} ${order.pagePhone ? `(${escapeHtml(order.pagePhone)})` : ''}</div>
+              </div>
+              <div class="info-row">
+                <div class="info-label">العميل:</div>
+                <div class="info-value">${escapeHtml(order.customerName || '—')} ${order.customerPhone ? `(${escapeHtml(order.customerPhone)})` : ''}</div>
+              </div>
+              <div class="info-row">
+                <div class="info-label">السعر:</div>
+                <div class="info-value">${order.price || 0} د.أ ${order.priceChanged ? '(تم التعديل)' : ''}</div>
+              </div>
+              <div class="info-row">
+                <div class="info-label">تاريخ الإنشاء:</div>
+                <div class="info-value">${formatDateTime(order.createdAt)}</div>
+              </div>
+              <div class="info-row">
+                <div class="info-label">آخر تحديث:</div>
+                <div class="info-value">${formatDateTime(order.updatedAt)}</div>
+              </div>
+              ${order.hasIssue ? '<div class="info-row"><div class="info-label" style="color: #dc3545;">⚠️ توجد مشكلة</div></div>' : ''}
+              ${order.rejectedOnArrival ? '<div class="info-row"><div class="info-label" style="color: #dc3545;">❌ رفض عند الوصول</div></div>' : ''}
+              ${conversationHtml}
+            </div>
+          </div>
+        `;
+      }
+
+      async function loadAndRender() {
+        const ids = getOrderIdsFromUrl();
+        const contentEl = document.getElementById('content');
+
+        if (ids.length === 0) {
+          contentEl.innerHTML = '<div class="no-orders">لم يتم تحديد أي طلبات للطباعة</div>';
+          return;
+        }
+
+        // Wait for Store to load
+        let attempts = 0;
+        while (!window.Store && attempts < 50) {
+          await new Promise(r => setTimeout(r, 100));
+          attempts++;
+        }
+
+        if (!window.Store) {
+          contentEl.innerHTML = '<div class="no-orders">خطأ في تحميل البيانات</div>';
+          return;
+        }
+
+        // Get orders from Store
+        const allOrders = Store.getOrders ? Store.getOrders() : [];
+        const ordersToPrint = allOrders.filter(o => ids.includes(String(o.id)));
+
+        if (ordersToPrint.length === 0) {
+          contentEl.innerHTML = '<div class="no-orders">لم يتم العثور على الطلبات المحددة</div>';
+          return;
+        }
+
+        const now = new Date();
+        const headerHtml = `
+          <div class="print-header">
+            <h1>Quick Delivery - تقرير الطلبات</h1>
+            <div class="date">تاريخ الطباعة: ${now.toLocaleString('ar')}</div>
+            <div class="date">عدد الطلبات: ${ordersToPrint.length}</div>
+          </div>
+        `;
+
+        const ordersHtml = ordersToPrint.map(renderOrder).join('');
+
+        const footerHtml = `
+          <div class="print-footer">
+            Quick Delivery © ${now.getFullYear()} - جميع الحقوق محفوظة
+          </div>
+        `;
+
+        contentEl.innerHTML = headerHtml + ordersHtml + footerHtml;
+
+        // Auto-print after a short delay
+        setTimeout(() => {
+          if (!window.location.search.includes('no-auto-print')) {
+            window.print();
+          }
+        }, 500);
+      }
+
+      loadAndRender();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quick Delivery | لوحة التحكم</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <link rel="stylesheet" href="assets/css/styles.css?v=20260203-2" />
+  <link rel="icon" href="assets/img/logo-quick-delivery.png" type="image/png" />
+</head>
+<body data-page="dashboard" class="theme-dark theme-minimal bg-soft">
+  <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
+    <div class="container-fluid px-3">
+      <a class="navbar-brand fw-bold ms-2 ms-lg-0" href="dashboard.html">
+        <img src="assets/img/logo-quick-delivery.png" alt="Quick Delivery" class="me-1" style="height:24px" />
+        Quick Delivery
+      </a>
+
+      <div class="d-none d-lg-flex nav nav-pills gap-2 mx-auto role-gated-nav">
+        <button class="nav-link active text-end" data-bs-toggle="pill" data-bs-target="#tabOrders" type="button" role="tab">
+          <i class="bi bi-table ms-1"></i>
+          الطلبات
+        </button>
+        <button class="nav-link text-end" data-bs-toggle="pill" data-bs-target="#tabFeed" type="button" role="tab">
+          <i class="bi bi-activity ms-1"></i>
+          المتابعة
+        </button>
+        <button class="nav-link text-end admin-only" data-bs-toggle="pill" data-bs-target="#tabUsers" type="button" role="tab">
+          <i class="bi bi-people ms-1"></i>
+          المستخدمون
+          <span id="usersPendingBadge" class="badge rounded-pill text-bg-warning text-dark ms-1 d-none">0</span>
+        </button>
+        <button class="nav-link text-end admin-only" data-bs-toggle="pill" data-bs-target="#tabStats" type="button" role="tab">
+          <i class="bi bi-bar-chart ms-1"></i>
+          الإحصائيات
+        </button>
+      </div>
+
+      <div class="dropdown d-lg-none ms-auto me-2 role-gated-nav">
+        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">القائمة</button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><button class="dropdown-item" data-bs-toggle="pill" data-bs-target="#tabOrders" type="button" role="tab"><i class="bi bi-table ms-1"></i> الطلبات</button></li>
+          <li><button class="dropdown-item" data-bs-toggle="pill" data-bs-target="#tabFeed" type="button" role="tab"><i class="bi bi-activity ms-1"></i> المتابعة</button></li>
+          <li><button class="dropdown-item d-flex align-items-center justify-content-between admin-only" data-bs-toggle="pill" data-bs-target="#tabUsers" type="button" role="tab"><span><i class="bi bi-people ms-1"></i> المستخدمون</span><span id="usersPendingBadgeSm" class="badge rounded-pill text-bg-warning text-dark d-none">0</span></button></li>
+          <li><button class="dropdown-item admin-only" data-bs-toggle="pill" data-bs-target="#tabStats" type="button" role="tab"><i class="bi bi-bar-chart ms-1"></i> الإحصائيات</button></li>
+        </ul>
+      </div>
+
+      <div class="d-flex align-items-center gap-2 ms-auto">
+        <div class="dropdown">
+          <button id="alertsBell" class="btn btn-outline-secondary btn-sm position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="التنبيهات">
+            <i class="bi bi-bell"></i>
+            <span id="alertsCount" class="position-absolute top-0 start-0 translate-middle badge rounded-pill text-bg-danger d-none">1</span>
+          </button>
+          <div class="dropdown-menu dropdown-menu-end p-0" aria-labelledby="alertsBell" style="min-width: 420px;">
+            <div class="px-3 py-2 border-bottom fw-semibold">التنبيهات</div>
+            <div id="alertsDropdown" class="list-group list-group-flush" style="max-height:320px;overflow:auto;">
+              <div class="text-center text-muted py-2">لا توجد تنبيهات</div>
+            </div>
+          </div>
+        </div>
+        <div class="dropdown">
+          <button id="navUser" class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            —
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#profileModal">
+                <i class="bi bi-person ms-1"></i>
+                الملف الشخصي
+              </button>
+            </li>
+          </ul>
+        </div>
+        <button id="logoutBtn" class="btn btn-outline-danger btn-sm">
+          <i class="bi bi-box-arrow-right ms-1"></i>
+          خروج
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row g-0">
+      <div class="col-12">
+        <main class="p-3 p-lg-4">
+          <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+            <div>
+              <h1 class="h4 fw-bold mb-1">لوحة التحكم</h1>
+              <div class="text-muted small">إدارة الطلبات والتنبيهات والإحصائيات</div>
+            </div>
+          </div>
+
+          <div id="metricsRow" class="row g-3 mb-3">
+            <div class="col-12 col-md-6">
+              <div class="card shadow-sm">
+                <div class="card-body">
+                  <div class="text-muted small">طلبات اليوم</div>
+                  <div id="metricToday" class="h3 fw-bold mb-0">—</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="card shadow-sm">
+                <div class="card-body">
+                  <div class="text-muted small">طلبات بها مشاكل</div>
+                  <div id="metricIssues" class="h3 fw-bold mb-0">—</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-content">
+            <section class="tab-pane fade show active" id="tabOrders" role="tabpanel">
+              <div class="card shadow-sm">
+                <div class="card-body">
+                  <div class="row g-2 align-items-end">
+                    <div class="col-12 col-lg-4">
+                      <label class="form-label">بحث سريع</label>
+                      <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-search"></i></span>
+                        <input id="searchInput" class="form-control" placeholder="ابحث برقم الطلب/رقم العميل/اسم الصفحة/اسم المندوب/الأرقام..." />
+                      </div>
+                    </div>
+
+                    <div class="col-6 col-lg-2">
+                      <label class="form-label">التاريخ</label>
+                      <input id="dateFilter" type="date" class="form-control" />
+                    </div>
+
+                    <div class="col-6 col-lg-2">
+                      <label class="form-label">الوقت</label>
+                      <input id="timeFilter" type="time" class="form-control" />
+                    </div>
+
+                    <div class="col-12 col-lg-2">
+                      <label class="form-label">فلترة حسب الحالة</label>
+                      <div class="d-flex flex-column gap-2">
+                        <div class="form-check">
+                          <input id="filterRejected" class="form-check-input" type="checkbox" />
+                          <label class="form-check-label" for="filterRejected">رفض عند الوصول</label>
+                        </div>
+                        <div class="form-check">
+                          <input id="filterPriceChanged" class="form-check-input" type="checkbox" />
+                          <label class="form-check-label" for="filterPriceChanged">تعديل سعر</label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-lg-2 d-flex gap-2">
+                      <button id="sortBtn" class="btn btn-outline-secondary w-100" data-sort="desc">
+                        <i class="bi bi-sort-down ms-1"></i>
+                        ترتيب حسب آخر تحديث
+                      </button>
+                      <button id="btnResetFilters" class="btn btn-outline-light text-dark border w-100">
+                        إعادة ضبط
+                      </button>
+                    </div>
+                  </div>
+
+                  <hr class="my-4" />
+
+                  <div class="table-responsive">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <div class="d-flex align-items-center gap-2">
+                        <input type="checkbox" id="selectAllOrders" class="form-check-input" />
+                        <label for="selectAllOrders" class="form-check-label small">تحديد الكل</label>
+                        <span id="selectedCount" class="badge bg-primary d-none">0 محدد</span>
+                      </div>
+                      <div class="d-flex align-items-center gap-2">
+                        <button id="btnClearSelection" class="btn btn-outline-secondary btn-sm d-none">
+                          <i class="bi bi-x-circle ms-1"></i>
+                          إلغاء التحديد
+                        </button>
+                        <button id="btnPrintSelected" class="btn btn-success btn-sm d-none">
+                          <i class="bi bi-printer ms-1"></i>
+                          طباعة المحدد
+                        </button>
+                      </div>
+                    </div>
+                    <table class="table align-middle table-hover">
+                      <thead class="table-light">
+                        <tr>
+                          <th style="width: 40px;"><input type="checkbox" id="selectAllHeader" class="form-check-input" /></th>
+                          <th>رقم الطلب</th>
+                          <th>المندوب</th>
+                          <th>الصفحة</th>
+                          <th>حالة الطلب</th>
+                          <th>آخر رسالة</th>
+                          <th>تاريخ آخر تحديث</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody id="ordersTbody">
+                        <tr><td colspan="7" class="text-center text-muted py-4">جاري التحميل...</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div id="ordersEmpty" class="text-center text-muted d-none py-4">لا توجد نتائج مطابقة.</div>
+                </div>
+              </div>
+            </section>
+
+            <section class="tab-pane fade" id="tabFeed" role="tabpanel">
+              <div class="card shadow-sm">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                    <div>
+                      <div class="fw-bold">Feed (آخر الأحداث)</div>
+                      <div class="small text-muted">آخر الطلبات، آخر الرسائل، والتنبيهات/المشاكل.</div>
+                    </div>
+                    <button id="btnFeedRefresh" class="btn btn-primary btn-sm" type="button">
+                      <i class="bi bi-arrow-repeat ms-1"></i>
+                      تحديث
+                    </button>
+                  </div>
+
+                  <div class="list-group" id="feedList"></div>
+                  <div id="feedEmpty" class="text-center text-muted d-none py-4">لا توجد أحداث لعرضها.</div>
+                </div>
+              </div>
+            </section>
+
+            <section class="tab-pane fade admin-only" id="tabUsers" role="tabpanel">
+              <div class="card shadow-sm">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                    <div>
+                      <div class="fw-bold">إدارة المستخدمين</div>
+                      <div class="small text-muted">هذه الصفحة للمدير فقط. يمكنك الموافقة/الحظر/الحذف.</div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                      <select id="usersFilter" class="form-select form-select-sm w-auto" aria-label="فلترة المستخدمين">
+                        <option value="all" selected>الكل</option>
+                        <option value="pending">بانتظار الموافقة</option>
+                        <option value="approved">مُعتمد</option>
+                        <option value="active">مُعتمد (غير محظور)</option>
+                        <option value="blocked">محظور</option>
+                        <option value="deleted">محذوف</option>
+                      </select>
+                      <button id="btnUsersRefresh" class="btn btn-outline-secondary btn-sm" type="button">
+                        <i class="bi bi-arrow-repeat ms-1"></i>
+                        تحديث
+                      </button>
+                    </div>
+                  </div>
+
+                  <div id="usersAlert" class="alert alert-danger d-none" role="alert"></div>
+
+                  <div class="table-responsive">
+                    <table class="table align-middle table-hover">
+                      <thead class="table-light">
+                        <tr>
+                          <th>الاسم</th>
+                          <th>الهاتف</th>
+                          <th>الدور</th>
+                          <th>الحالة</th>
+                          <th>تاريخ الإنشاء</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody id="usersTbody">
+                        <tr><td colspan="6" class="text-center text-muted py-4">—</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div id="usersEmpty" class="text-center text-muted d-none py-4">لا توجد بيانات.</div>
+                </div>
+              </div>
+            </section>
+
+            <section class="tab-pane fade admin-only" id="tabStats" role="tabpanel">
+              <div class="row g-3">
+                <div class="col-12 col-lg-6">
+                  <div class="card shadow-sm stats-card">
+                    <div class="card-body stats-card-body">
+                      <div class="fw-bold small mb-2">توزيع طلبات اليوم حسب الساعة   </div>
+                      <canvas id="chartDaily" class="stats-card-canvas w-100"></canvas>
+                      <div class="d-flex justify-content-between small text-muted pt-1">
+                        <span id="dailyTotal">الإجمالي: —</span>
+                        <span id="dailyPeak">الأعلى: —</span>
+                        <span id="dailyAvg">المتوسط: —</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                  <div class="card shadow-sm stats-card">
+                    <div class="card-body stats-card-body">
+                      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                        <div class="fw-bold small">التسليمات المرفوضة للمندوب</div>
+                        <select id="agentsRejectRange" class="form-select form-select-sm" style="width:auto;min-width:170px;">
+                          <option value="day">خلال آخر يوم</option>
+                          <option value="week">خلال آخر أسبوع</option>
+                          <option value="month" selected>خلال آخر شهر</option>
+                        </select>
+                      </div>
+                      <canvas id="chartAgents" class="stats-card-canvas w-100"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row g-3 mt-1">
+                <div class="col-12 col-lg-6">
+                  <div class="card shadow-sm stats-card">
+                    <div class="card-body stats-card-body">
+                      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                        <div class="fw-bold small">المندوب الأعلى في عدد الرسائل</div>
+                        <select id="miniAgentMsgRange" class="form-select form-select-sm" style="width:auto;min-width:170px;">
+                          <option value="day">خلال آخر يوم</option>
+                          <option value="week">خلال آخر أسبوع</option>
+                          <option value="month" selected>خلال آخر شهر</option>
+                        </select>
+                      </div>
+                      <canvas id="chartMiniAwaiting" class="stats-card-canvas w-100"></canvas>
+                      <div class="d-flex justify-content-between small text-muted pt-1">
+                        <span id="miniAwaitingTotal">الإجمالي: —</span>
+                        <span id="miniAwaitingPeak">الأعلى: —</span>
+                        <span id="miniAwaitingAvg">المتوسط: —</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                  <div class="card shadow-sm stats-card">
+                    <div class="card-body stats-card-body">
+                      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                        <div class="fw-bold small">مؤشر فعالية قسم المتابعة</div>
+                        <select id="trackingPerfRange" class="form-select form-select-sm" style="width:auto;min-width:170px;">
+                          <option value="day">خلال آخر يوم</option>
+                          <option value="week">خلال آخر أسبوع</option>
+                          <option value="month" selected>خلال آخر شهر</option>
+                        </select>
+                      </div>
+                      <canvas id="chartTrackingPerf" class="stats-card-canvas w-100"></canvas>
+                      <div id="trackingPerfHint" class="small text-muted mt-2"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <script src="assets/js/utils.js?v=20260128-1" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="supabase-config.js?v=20260128-1" defer></script>
+  <script src="assets/js/supabase.js?v=20260128-1" defer></script>
+  <script src="assets/js/auth.js?v=20260128-1" defer></script>
+  <script src="assets/js/realtime.js?v=20260201-2" defer></script>
+  <script src="assets/js/store.js?v=20260201-2" defer></script>
+  <script src="assets/js/alerts.js?v=20260201-2" defer></script>
+  <script src="assets/js/orders.js?v=20260201-5" defer></script>
+  <script src="assets/js/feed.js?v=20260128-1" defer></script>
+  <script src="assets/js/users.js?v=20260128-1" defer></script>
+  <script src="assets/js/stats.js?v=20260201-8" defer></script>
+  <script src="assets/js/app.js?v=20260203-3" defer></script>
+  <script src="assets/js/alerts-bell.js?v=20260128-1" defer></script>
+
+  <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="profileModalLabel">الملف الشخصي</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+        </div>
+        <div class="modal-body">
+          <dl class="row mb-0">
+            <dt class="col-4 text-muted">الاسم</dt>
+            <dd id="profileName" class="col-8 fw-semibold">—</dd>
+
+            <dt class="col-4 text-muted">الدور</dt>
+            <dd id="profileRole" class="col-8">—</dd>
+
+            <dt class="col-4 text-muted">المعرف</dt>
+            <dd id="profileUsername" class="col-8">—</dd>
+
+            <dt class="col-4 text-muted">الهاتف</dt>
+            <dd id="profilePhone" class="col-8">—</dd>
+
+            <dt class="col-4 text-muted">تاريخ الإنشاء</dt>
+            <dd id="profileCreatedAt" class="col-8">—</dd>
+          </dl>
+
+          <hr class="my-3" />
+
+          <button id="profilePwOpen" type="button" class="btn btn-outline-primary w-100">تغيير كلمة المرور</button>
+
+          <div id="profilePwSection" class="d-none mt-3">
+            <div id="profilePwAlert" class="alert alert-danger d-none" role="alert"></div>
+            <form id="profilePwForm" autocomplete="off">
+              <div class="mb-2">
+                <label class="form-label">كلمة المرور الحالية</label>
+                <input id="profilePwOld" type="password" class="form-control" required />
+              </div>
+              <div class="mb-2">
+                <label class="form-label">كلمة مرور جديدة</label>
+                <input id="profilePwNew" type="password" class="form-control" minlength="6" required />
+              </div>
+              <div class="mb-2">
+                <label class="form-label">تأكيد كلمة المرور</label>
+                <input id="profilePwConfirm" type="password" class="form-control" minlength="6" required />
+              </div>
+              <div class="d-flex justify-content-end">
+                <button id="profilePwToggle" type="button" class="btn btn-outline-secondary me-auto" aria-label="إظهار/إخفاء كلمة المرور">
+                  <i class="bi bi-eye"></i>
+                </button>
+                <button id="profilePwSave" type="submit" class="btn btn-primary">حفظ</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

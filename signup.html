@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quick Delivery | إنشاء حساب</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <link rel="stylesheet" href="assets/css/styles.css?v=20260128-1" />
+  <link rel="icon" href="assets/img/logo-quick-delivery.png" type="image/png" />
+</head>
+<body data-page="signup" class="theme-dark theme-minimal bg-soft">
+  <nav class="navbar bg-white border-bottom sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+        <img src="assets/img/logo-quick-delivery.png" alt="Quick Delivery" class="me-1" style="height:24px" />
+        Quick Delivery
+      </a>
+
+      <div class="d-flex gap-2 align-items-center">
+        <a class="btn btn-outline-secondary" href="index.html">
+          <i class="bi bi-house ms-1"></i>
+          الرئيسية
+        </a>
+        <a class="btn btn-outline-secondary" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
+          <i class="bi bi-box-arrow-in-left ms-1"></i>
+          تسجيل الدخول
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="py-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-9 col-lg-6">
+          <div class="card signup-card shadow-lg border-0 rounded-4">
+            <div class="card-body p-4 p-lg-5">
+              <h1 class="h4 fw-bold mb-2 text-end">إنشاء حساب</h1>
+              <p class="text-muted mb-4 text-end">بعد إنشاء الحساب سيتم تفعيل الصلاحيات فور موافقة المدير.</p>
+
+              <div id="signupAlert" class="alert alert-danger d-none" role="alert"></div>
+              <div id="signupSuccess" class="alert alert-success d-none" role="alert"></div>
+
+              <form id="signupForm" novalidate>
+                <div class="mb-3">
+                  <label class="form-label" style="color:#0f172a">الاسم الكامل</label>
+                  <div class="input-group input-group-lg">
+                    <span class="input-group-text"><i class="bi bi-person"></i></span>
+                    <input id="fullName" class="form-control form-control-lg" type="text" placeholder="مثال: أحمد محمد" autocomplete="name" required />
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label" style="color:#0f172a">رقم الهاتف</label>
+                  <div class="input-group input-group-lg">
+                    <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                    <input id="phone" class="form-control form-control-lg" type="tel" placeholder="06XXXXXXXX" autocomplete="tel" required />
+                  </div>
+                  <div class="form-text mt-1" style="color: rgba(15,23,42,0.70);">اكتب الرقم بدون فراغات. سيتم استخدامه لتسجيل الدخول.</div>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label" style="color:#0f172a">البريد الإلكتروني</label>
+                  <div class="input-group input-group-lg">
+                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                    <input id="email" class="form-control form-control-lg" type="email" placeholder="example@email.com" autocomplete="email" />
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label" style="color:#0f172a">كلمة المرور</label>
+                  <div class="input-group input-group-lg">
+                    <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                    <input id="password" type="password" class="form-control form-control-lg" placeholder="••••••" autocomplete="new-password" required />
+                    <button id="togglePassword" class="btn btn-outline-secondary" type="button" aria-label="إظهار/إخفاء كلمة المرور">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <button class="btn btn-primary btn-lg w-100" type="submit">
+                  إنشاء الحساب
+                </button>
+              </form>
+
+              <div class="text-center mt-3">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal" class="link-secondary small">لديك حساب؟ تسجيل الدخول</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+  <script src="assets/js/utils.js?v=20260128-1" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="supabase-config.js?v=20260128-1" defer></script>
+  <script src="assets/js/supabase.js?v=20260128-1" defer></script>
+  <script src="assets/js/auth.js?v=20260128-1" defer></script>
+  <script src="assets/js/signup.js?v=20260128-1" defer></script>
+  <script src="assets/js/app.js?v=20260128-1" defer></script>
+
+  <!-- Login Modal -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">تسجيل الدخول</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div id="landingLoginAlert" class="alert alert-danger d-none" role="alert"></div>
+          <form id="landingLoginForm" novalidate>
+            <div class="mb-3">
+              <label class="form-label">الاسم أو رقم الهاتف</label>
+              <input id="landingUsername" class="form-control" type="text" autocomplete="username" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">كلمة المرور</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                <input id="landingPassword" type="password" class="form-control" autocomplete="current-password" required />
+                <button class="btn btn-outline-secondary" type="button" data-toggle-password="landingPassword" aria-label="إظهار/إخفاء كلمة المرور">
+                  <i class="bi bi-eye"></i>
+                </button>
+              </div>
+            </div>
+            <div class="form-check mb-3">
+              <input id="landingRemember" class="form-check-input" type="checkbox" checked />
+              <label class="form-check-label" for="landingRemember">تذكرني على هذا الجهاز</label>
+            </div>
+            <div class="d-flex justify-content-end mb-3">
+              <button id="landingForgotPwBtn" type="button" class="btn btn-link p-0 link-secondary small">نسيت كلمة المرور؟</button>
+            </div>
+            <button class="btn btn-primary w-100" type="submit">دخول</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
