@@ -63,6 +63,8 @@ create table if not exists public.messages (
 
 alter table public.messages add column if not exists by_name text;
 
+drop function if exists public.lookup_login_email(text) cascade;
+
 create or replace function public.lookup_login_email(p_identifier text)
 returns text
 language sql
@@ -97,6 +99,8 @@ as $$
   limit 1;
 $$;
 
+drop function if exists public.admin_list_users() cascade;
+
 create or replace function public.admin_list_users()
 returns table (
   id uuid,
@@ -123,6 +127,8 @@ as $$
   )
   order by p.created_at desc;
 $$;
+
+drop function if exists public.admin_set_user_role(uuid, text) cascade;
 
 create or replace function public.admin_set_user_role(p_user_id uuid, p_role text)
 returns void
@@ -185,6 +191,8 @@ begin
 end;
 $$;
 
+drop function if exists public.admin_set_user_blocked(uuid, boolean) cascade;
+
 create or replace function public.admin_set_user_blocked(p_user_id uuid, p_blocked boolean)
 returns void
 language plpgsql
@@ -220,6 +228,8 @@ begin
   where id = p_user_id;
 end;
 $$;
+
+drop function if exists public.admin_soft_delete_user(uuid) cascade;
 
 create or replace function public.admin_soft_delete_user(p_user_id uuid)
 returns void
@@ -298,6 +308,8 @@ as $$
   order by p.created_at desc;
 $$;
 
+drop function if exists public.admin_approve_user(uuid) cascade;
+
 create or replace function public.admin_approve_user(p_user_id uuid)
 returns void
 language plpgsql
@@ -372,6 +384,8 @@ create index if not exists audit_logs_actor_id_idx on public.audit_logs(actor_id
 create index if not exists order_status_history_order_id_created_at_idx
   on public.order_status_history(order_id, created_at);
 
+drop function if exists public.set_updated_at() cascade;
+
 create or replace function public.set_updated_at()
 returns trigger
 language plpgsql
@@ -391,6 +405,8 @@ drop trigger if exists trg_users_profile_set_updated_at on public.users_profile;
 create trigger trg_users_profile_set_updated_at
 before update on public.users_profile
 for each row execute procedure public.set_updated_at();
+
+drop function if exists public.handle_new_user() cascade;
 
 create or replace function public.handle_new_user()
 returns trigger
@@ -422,6 +438,8 @@ create trigger on_auth_user_created
 after insert on auth.users
 for each row execute procedure public.handle_new_user();
 
+drop function if exists public.log_order_created() cascade;
+
 create or replace function public.log_order_created()
 returns trigger
 language plpgsql
@@ -439,6 +457,8 @@ drop trigger if exists trg_orders_log_insert on public.orders;
 create trigger trg_orders_log_insert
 after insert on public.orders
 for each row execute procedure public.log_order_created();
+
+drop function if exists public.log_order_status_change() cascade;
 
 create or replace function public.log_order_status_change()
 returns trigger
@@ -461,6 +481,8 @@ create trigger trg_orders_log_status_change
 after update on public.orders
 for each row execute procedure public.log_order_status_change();
 
+drop function if exists public.detect_keyword(text) cascade;
+
 create or replace function public.detect_keyword(p_text text)
 returns text
 language sql
@@ -474,6 +496,8 @@ as $$
   order by length(k.keyword) desc
   limit 1;
 $$;
+
+drop function if exists public.handle_new_message() cascade;
 
 create or replace function public.handle_new_message()
 returns trigger
@@ -502,6 +526,8 @@ drop trigger if exists trg_messages_after_insert on public.messages;
 create trigger trg_messages_after_insert
 after insert on public.messages
 for each row execute procedure public.handle_new_message();
+
+drop function if exists public.audit_trigger() cascade;
 
 create or replace function public.audit_trigger()
 returns trigger
@@ -671,6 +697,8 @@ using (
 drop policy if exists messages_insert_admin_agent on public.messages;
 -- Read-only: لا يوجد insert عبر الواجهة.
 
+drop policy if exists messages_insert_allowed on public.messages;
+
 create policy messages_insert_allowed
 on public.messages
 for insert
@@ -692,6 +720,8 @@ drop policy if exists messages_update_admin on public.messages;
 
 drop policy if exists messages_delete_admin on public.messages;
 -- Read-only: لا يوجد delete عبر الواجهة.
+
+drop function if exists public.tracking_add_message(bigint,text,text,text,integer) cascade;
 
 create or replace function public.tracking_add_message(
   p_order_id bigint,
@@ -749,6 +779,8 @@ $$;
 
 grant execute on function public.tracking_add_message(bigint, text, text, text, integer) to authenticated;
 
+drop function if exists public.tracking_log_resolution(bigint) cascade;
+
 create or replace function public.tracking_log_resolution(p_order_id bigint)
 returns void
 language plpgsql
@@ -787,6 +819,8 @@ end;
 $$;
 
 grant execute on function public.tracking_log_resolution(bigint) to authenticated;
+
+drop function if exists public.tracking_update_order_status(bigint, text) cascade;
 
 create or replace function public.tracking_update_order_status(
   p_order_id bigint,
@@ -827,6 +861,8 @@ $$;
 
 grant execute on function public.tracking_update_order_status(bigint, text) to authenticated;
 
+drop function if exists public._normalize_msg_text(text) cascade;
+
 create or replace function public._normalize_msg_text(p_text text)
 returns text
 language sql
@@ -834,6 +870,8 @@ immutable
 as $$
   select lower(trim(coalesce(p_text, '')));
 $$;
+
+drop function if exists public.infer_order_status_from_message(text, text) cascade;
 
 create or replace function public.infer_order_status_from_message(
   p_from_role text,
@@ -935,6 +973,8 @@ begin
   return;
 end;
 $$;
+
+drop function if exists public.messages_auto_update_order_status() cascade;
 
 create or replace function public.messages_auto_update_order_status()
 returns trigger
