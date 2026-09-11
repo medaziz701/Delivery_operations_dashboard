@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quick Delivery | بانتظار موافقة المدير</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <link rel="stylesheet" href="assets/css/styles.css?v=20260128-1" />
+  <link rel="icon" href="assets/img/logo-quick-delivery.png" type="image/png" />
+</head>
+<body data-page="pending" class="theme-dark theme-minimal bg-soft">
+  <nav class="navbar sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+        <img src="assets/img/logo-quick-delivery.png" alt="Quick Delivery" class="me-1" style="height:24px" onerror="this.onerror=null;this.src='assets/icons/favicon.svg';" />
+        Quick Delivery
+      </a>
+
+      <div class="d-flex align-items-center gap-2 ms-auto">
+        <span id="navUser" class="badge text-bg-light text-dark border">—</span>
+        <button id="logoutBtn" class="btn btn-outline-danger btn-sm">
+          <i class="bi bi-box-arrow-right ms-1"></i>
+          خروج
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="py-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-9 col-lg-7">
+          <div class="card shadow-lg border-0 rounded-4">
+            <div class="card-body p-4 p-lg-5">
+              <div class="d-flex align-items-start gap-3">
+                <div class="feature-icon text-warning" style="background: rgba(255,193,7,0.15);">
+                  <i class="bi bi-hourglass-split"></i>
+                </div>
+                <div>
+                  <h1 class="h4 fw-bold mb-2">بانتظار موافقة المدير</h1>
+                  <p class="text-muted mb-3">تم إنشاء حسابك بنجاح. سيتم تفعيل الوصول فور موافقة المدير.</p>
+                </div>
+              </div>
+
+              <div id="pendingAlert" class="alert alert-danger d-none" role="alert"></div>
+              <div id="pendingOk" class="alert alert-success d-none" role="alert"></div>
+
+              <div class="d-flex flex-wrap gap-2">
+                <button id="btnCheck" class="btn btn-primary" type="button">
+                  <i class="bi bi-arrow-repeat ms-1"></i>
+                  تحقق الآن
+                </button>
+                <a class="btn btn-outline-secondary" href="index.html">العودة للرئيسية</a>
+              </div>
+
+              <hr class="my-4" />
+
+              <div class="small text-muted">
+                إذا احتجت دعمًا، يمكن لفريق المتابعة إرسال "طلب تدخل" من داخل الداشبورد.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+  <script src="assets/js/utils.js?v=20260128-1" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="supabase-config.js?v=20260128-1" defer></script>
+  <script src="assets/js/supabase.js?v=20260128-1" defer></script>
+  <script src="assets/js/auth.js?v=20260128-1" defer></script>
+  <script src="assets/js/pending.js?v=20260128-1" defer></script>
+  <script src="assets/js/app.js?v=20260128-1" defer></script>
+</body>
+</html>

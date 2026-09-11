@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quick Delivery | تفاصيل الطلب</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <link rel="stylesheet" href="assets/css/styles.css?v=20260201-2" />
+  <link rel="icon" href="assets/img/logo-quick-delivery.png" type="image/png" />
+</head>
+<body data-page="order-details" class="theme-dark theme-minimal bg-soft">
+  <nav class="navbar bg-white border-bottom sticky-top">
+    <div class="container-fluid px-3">
+      <a class="btn btn-outline-secondary btn-sm" href="dashboard.html">
+        <i class="bi bi-arrow-right ms-1"></i>
+        العودة
+      </a>
+
+      <a class="navbar-brand fw-bold ms-2" href="dashboard.html">
+        <img src="assets/img/logo-quick-delivery.png" alt="Quick Delivery" class="me-1" style="height:24px" />
+        Quick Delivery
+      </a>
+
+      <div class="d-flex align-items-center gap-2 ms-auto">
+        <div class="dropdown">
+          <button id="alertsBell" class="btn btn-outline-secondary btn-sm position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="التنبيهات">
+            <i class="bi bi-bell"></i>
+            <span id="alertsCount" class="position-absolute top-0 start-0 translate-middle badge rounded-pill text-bg-danger d-none">1</span>
+          </button>
+          <div class="dropdown-menu dropdown-menu-end p-0" aria-labelledby="alertsBell" style="min-width: 420px;">
+            <div class="px-3 py-2 border-bottom fw-semibold">التنبيهات</div>
+            <div id="alertsDropdown" class="list-group list-group-flush" style="max-height:320px;overflow:auto;">
+              <div class="text-center text-muted py-2">لا توجد تنبيهات</div>
+            </div>
+          </div>
+        </div>
+        <span id="navUser" class="badge text-bg-light text-dark border">—</span>
+        <button id="logoutBtn" class="btn btn-outline-danger btn-sm">
+          <i class="bi bi-box-arrow-right ms-1"></i>
+          خروج
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container-fluid px-3 px-lg-4 py-4">
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+      <div>
+        <h1 class="h4 fw-bold mb-1">تفاصيل الطلب</h1>
+        <div class="fw-bold small text-secondary">عرض كامل للبيانات + المحادثة + سجل التغييرات</div>
+      </div>
+      <div class="d-flex gap-2">
+        <a id="openInDashboard" class="btn btn-outline-secondary btn-sm" href="dashboard.html">العودة للطلبات</a>
+      </div>
+    </div>
+
+    
+
+    <div id="detailsAlert" class="alert alert-danger d-none mb-3" role="alert"></div>
+
+    <div class="row g-3">
+      <div class="col-12 col-xl-7">
+        <div class="card shadow-sm mb-3">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+              <div>
+                <div class="text-muted small">رقم الطلب</div>
+                <div id="detailOrderId" class="h3 fw-bold mb-0">—</div>
+              </div>
+              <div class="text-end">
+                <div class="text-muted small">حالة الطلب</div>
+                <div id="detailStatus" class="h5 fw-bold mb-0">—</div>
+              </div>
+            </div>
+
+            <hr class="my-4" />
+
+            <dl class="row mb-0">
+              <dt class="col-5 col-md-4 text-muted">اسم صاحب الطلب</dt>
+              <dd id="detailCustomerName" class="col-7 col-md-8 fw-semibold">—</dd>
+
+              <dt class="col-5 col-md-4 text-muted">رقم صاحب الطلب</dt>
+              <dd class="col-7 col-md-8">
+                <div class="d-flex flex-wrap align-items-center gap-2">
+                  <span id="detailCustomerPhone" class="fw-semibold">—</span>
+                  <a id="detailCustomerWhatsApp" class="btn btn-outline-success btn-sm" href="#" target="_blank" rel="noopener">
+                    <i class="bi bi-whatsapp ms-1"></i>
+                    WhatsApp
+                  </a>
+                  <a id="detailCustomerCall" class="btn btn-outline-primary btn-sm" href="#">
+                    <i class="bi bi-telephone ms-1"></i>
+                    اتصال
+                  </a>
+                </div>
+              </dd>
+
+              <dt class="col-5 col-md-4 text-muted">اسم المندوب</dt>
+              <dd id="detailAgentName" class="col-7 col-md-8 fw-semibold">—</dd>
+
+              <dt class="col-5 col-md-4 text-muted">رقم هاتف المندوب</dt>
+              <dd class="col-7 col-md-8">
+                <div class="d-flex flex-wrap align-items-center gap-2">
+                  <span id="detailAgentPhone" class="fw-semibold">—</span>
+                  <a id="detailWhatsApp" class="btn btn-outline-success btn-sm" href="#" target="_blank" rel="noopener">
+                    <i class="bi bi-whatsapp ms-1"></i>
+                    WhatsApp
+                  </a>
+                  <a id="detailCall" class="btn btn-outline-primary btn-sm" href="#">
+                    <i class="bi bi-telephone ms-1"></i>
+                    اتصال
+                  </a>
+                </div>
+              </dd>
+
+              <dt class="col-5 col-md-4 text-muted">اسم الصفحة</dt>
+              <dd id="detailPageName" class="col-7 col-md-8 fw-semibold">—</dd>
+
+              <dt class="col-5 col-md-4 text-muted">رقم هاتف الصفحة</dt>
+              <dd class="col-7 col-md-8">
+                <div class="d-flex flex-wrap align-items-center gap-2">
+                  <a id="detailPageWhatsApp" class="btn btn-outline-success btn-sm" href="#" target="_blank" rel="noopener">
+                    <i class="bi bi-whatsapp ms-1"></i>
+                    WhatsApp
+                  </a>
+                  <span id="detailPageGroupId" class="small text-muted chat__ltr d-none"></span>
+                </div>
+              </dd>
+
+              <dt class="col-5 col-md-4 text-muted">آخر رسالة</dt>
+              <dd id="detailLastMessage" class="col-7 col-md-8">—</dd>
+
+              <dt class="col-5 col-md-4 text-muted">تاريخ آخر تحديث</dt>
+              <dd id="detailUpdatedAt" class="col-7 col-md-8">—</dd>
+            </dl>
+          </div>
+        </div>
+
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+              <div class="fw-bold">المحادثة كاملة</div>
+              <span class="badge text-bg-light text-dark border">نص • صور • صوت</span>
+            </div>
+
+            <div id="conversationContainer" class="chat"></div>
+            <hr class="my-3" />
+            <form id="sendMessageForm" class="mt-2" autocomplete="off">
+              <div class="row g-2 align-items-stretch">
+                <div class="col-12 col-sm-3">
+                  <select id="messageRecipient" class="form-select">
+                    <option value="agent">إلى المندوب</option>
+                    <option value="page">إلى الصفحة</option>
+                  </select>
+                </div>
+                <div class="col-12 col-sm-7">
+                  <input id="messageText" type="text" class="form-control" placeholder="اكتب الرسالة..." maxlength="500" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" />
+                  <div id="messagePreview" class="small text-muted mt-2 d-none"></div>
+                </div>
+                <div class="col-12 col-sm-2 d-grid">
+                  <button id="btnSendMessage" type="submit" class="btn btn-primary">إرسال</button>
+                </div>
+              </div>
+              <div class="row g-2 mt-2">
+                <div class="col-12 d-flex gap-2">
+                  <button id="btnAttachImage" type="button" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-image ms-1"></i>
+                    صورة
+                  </button>
+                  <button id="btnAttachAudio" type="button" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-mic ms-1"></i>
+                    صوت
+                  </button>
+                  <input id="fileImage" type="file" accept="image/*" class="d-none" />
+                  <input id="fileAudio" type="file" accept="audio/*" class="d-none" />
+                </div>
+              </div>
+              <div id="audioRecordUI" class="mt-2 d-none">
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                  <span id="audioRecordStatus" class="small text-secondary">—</span>
+                  <button id="btnStopRecording" type="button" class="btn btn-danger btn-sm d-none">إيقاف</button>
+                  <button id="btnSendRecording" type="button" class="btn btn-primary btn-sm d-none">إرسال</button>
+                  <button id="btnCancelRecording" type="button" class="btn btn-outline-secondary btn-sm">إلغاء</button>
+                </div>
+                <div id="audioRecordPreviewWrap" class="mt-2 d-none">
+                  <audio id="audioRecordPreview" controls preload="metadata"></audio>
+                </div>
+              </div>
+              <div class="form-check form-switch mt-2 d-none">
+                <input class="form-check-input" type="checkbox" id="sendViaWhatsApp" checked>
+                <label class="form-check-label" for="sendViaWhatsApp">إرسال عبر واتساب (UltraMSG)</label>
+              </div>
+              <div id="sendMsgAlert" class="alert alert-danger d-none mt-2" role="alert"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-xl-5">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <div class="fw-bold mb-3">سجل التغييرات</div>
+            <ul id="timelineList" class="timeline"></ul>
+          </div>
+        </div>
+
+        <div id="orderAlertCard" class="card shadow-sm mt-3 d-none">
+          <div class="card-body">
+            <div class="fw-bold mb-3">تنبيه</div>
+            <div id="orderAlertContent"></div>
+            <div class="d-flex flex-wrap gap-2 mt-3">
+              <button id="orderAlertIntervene" type="button" class="btn btn-warning btn-sm">طلب تدخل</button>
+              <button id="orderAlertResolve" type="button" class="btn btn-outline-secondary btn-sm">تم حل المشكلة</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+  <script src="assets/js/utils.js?v=20260128-1" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="supabase-config.js?v=20260128-1" defer></script>
+  <script src="assets/js/supabase.js?v=20260128-1" defer></script>
+  <script src="assets/js/auth.js?v=20260128-1" defer></script>
+  <script src="assets/js/realtime.js?v=20260201-2" defer></script>
+  <script src="assets/js/store.js?v=20260201-2" defer></script>
+  <script src="assets/js/alerts.js?v=20260201-2" defer></script>
+  <script src="assets/js/order-details.js?v=20260201-6" defer></script>
+  <script src="assets/js/app.js?v=20260128-1" defer></script>
+  <script src="assets/js/alerts-bell.js?v=20260128-1" defer></script>
+</body>
+</html>
