@@ -74,7 +74,7 @@ php -S localhost:8000
 
 ## 🌐 Démo live
 
-En cours de déploiement
+https://medaziz701.github.io/Delivery_operations_dashboard/
 
 ## 📁 Structure du projet
 
