@@ -2,7 +2,7 @@
 
 > Tableau de bord de gestion des opérations de livraison avec suivi en temps réel, alertes automatiques et statistiques de performance.
 
-![screenshot](./screenshots/preview.png)
+
 
 ## 🚀 Stack technique
 
