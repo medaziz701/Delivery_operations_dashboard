@@ -3,6 +3,7 @@
 .env.local
 .env.*.local
 config-local.js
+supabase-config.js
 
 # Dependencies
 node_modules/
