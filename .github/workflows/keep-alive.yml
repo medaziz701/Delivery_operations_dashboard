@@ -2,8 +2,8 @@ name: Keep Supabase Alive
 
 on:
   schedule:
-    - cron: '0 8 */3 * *'  # tous les 3 jours à 8h UTC
-  workflow_dispatch:  # permet de le déclencher manuellement depuis GitHub aussi
+    - cron: '0 8 */2 * *'  # tous les 2 jours à 8h UTC
+  workflow_dispatch:
 
 jobs:
   ping:
@@ -11,5 +11,9 @@ jobs:
     steps:
       - name: Ping Supabase
         run: |
-          curl -s -o /dev/null -w "%{http_code}" "https://akeuwxezhbrrojgktybl.supabase.co/rest/v1/" \
-          -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}"
+          code=$(curl -s -o /dev/null -w "%{http_code}" \
+            "https://akeuwxezhbrrojgktybl.supabase.co/rest/v1/keywords?select=*&limit=1" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}")
+          echo "HTTP $code"
+          [ "$code" = "200" ]
